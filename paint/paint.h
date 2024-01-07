@@ -10,6 +10,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+// \033[38;2;<r>;<g>;<b>m  #Select RGB foreground color
+// \033[48;2;<r>;<g>;<b>m  #Select RGB background color
+// some info here: https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+
+
 #define RESET "\033[39m\033[49m"
 
 #define FORE_RED "\033[38;2;255;1;1m"
