@@ -47,6 +47,15 @@ void update_rule(Field* field) {
                         field->field[r][c]->status = UPDATED;
                         water_rule(field, r, c);
                     }
+
+                    break;
+
+                case SAND:
+                    if (field->field[r][c]->status == NOT_UPDATED) {
+                        field->field[r][c]->status = UPDATED;
+                        sand_rule(field, r, c);
+                    }
+
                     break;
             }
         }
@@ -106,22 +115,10 @@ int get_type_from_user() {
     return result;
 }
 
-void spawn_elem(Field* field, Cursor* cursor) {
+void spawn_elem(Field* field, const Cursor* cursor) {
     int new_type = cursor->hand;
-    char* new_symbol = NONE_SYMB;
-    char* new_color = RESET;
-
-    switch (new_type) {
-        case NONE:
-            new_symbol = NONE_SYMB;
-            new_color = RESET;
-            break;
-
-        case WATER:
-            new_symbol = WATER_SYMB;
-            new_color = FORE_BLUE;
-            break;
-    }
+    char* new_symbol = TABLE[new_type].symbol;
+    char* new_color = TABLE[new_type].color;
 
     field->field[cursor->y][cursor->x]->type = new_type;
     field->field[cursor->y][cursor->x]->symbol = color(new_symbol, new_color);
