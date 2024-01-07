@@ -25,4 +25,6 @@
 #define BACK_GREEN "\033[48;2;1;255;1m"
 #define BACK_BLUE "\033[48;2;1;1;255m"
 
+char* color(const char* text, const char* color);
+
 #endif

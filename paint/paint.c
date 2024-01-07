@@ -1,6 +1,6 @@
 #include "paint.h"
 
-char* color(char* text, char* color) {
+char* color(const char* text, const char* color) {
     size_t size = strlen(color) + strlen(text) + strlen(RESET);
     char* result = calloc(size + 1, sizeof(char));
 

@@ -12,16 +12,23 @@ void water_rule(Field* field, size_t curr_row, size_t curr_col) {
         cell_swap(&(field->field[curr_row + 1][curr_col]),
                   &(field->field[curr_row][curr_col]));
 
-    } else if (curr_col > 0 && field->field[curr_row][curr_col - 1]->type == NONE ) { // not a next to border cell
-        cell_swap(&(field->field[curr_row][curr_col]),
-                  &(field->field[curr_row][curr_col - 1]));
-
-    } else if (curr_col + 1 < field->rows && field->field[curr_row][curr_col + 1]->type == NONE) {
+    } else if (curr_col > 0 && curr_col + 1 < field->columns) { // random left right move
+        if (rand() % 2 == 0) {
             cell_swap(&(field->field[curr_row][curr_col]),
-                      &(field->field[curr_row][curr_col + 1]));
+                    &(field->field[curr_row][curr_col - 1]));
+        } else {
+                cell_swap(&(field->field[curr_row][curr_col]),
+                        &(field->field[curr_row][curr_col + 1]));
+        }
+
+    // if it's left border -> move right
+    } else if (curr_col == 0) { // field->field[curr_row][curr_col - 1]->type == NONE ) { // not a next to border cell
+        cell_swap(&(field->field[curr_row][curr_col]),
+                  &(field->field[curr_row][curr_col + 1]));
+
+    } else if (curr_col == field->columns) { // && field->field[curr_row][curr_col + 1]->type == NONE) {
+            cell_swap(&(field->field[curr_row][curr_col]),
+                      &(field->field[curr_row][curr_col - 1]));
     }
 }
 
-//void none_rule(Field* field, size_t curr_rows, size_t curr_col) {
-    //return;
-//}
