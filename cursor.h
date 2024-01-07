@@ -11,12 +11,12 @@
 #define CURSOR_SPAWN_ELEM ' '
 
 typedef struct {
-    size_t x;
-    size_t y;
+    int x;
+    int y;
     int hand;
+    int x_limit;
+    int y_limit;
     char* symbol;
-    size_t x_limit;
-    size_t y_limit;
 } Cursor;
 
 #endif

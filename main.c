@@ -14,7 +14,7 @@
 #include "cursor.h"
 
 #define TRM_DEBUG 0
-#define FPS (30 * 1500)
+#define FPS (30 * 1000)
 
 #define QUIT_KEY_LOWER 'q'
 #define QUIT_KEY_UPPER 'Q'
@@ -22,7 +22,7 @@
 void print_field(Field* field, Cursor* cursor) {
     for (size_t r = 0; r < field->rows; ++r) {
         for (size_t c = 0; c < field->columns; ++c) {
-            if (cursor->x == c && cursor->y == r) {
+            if ((size_t)cursor->x == c && (size_t)cursor->y == r) {
                 printf(cursor->symbol);
 
             } else {
@@ -56,19 +56,19 @@ void update_rule(Field* field) {
 }
 
 void cursor_check_limit(Cursor* cursor) {
-    if (cursor-> x == 0) {
-        cursor->x = 1;
+    if (cursor-> x < 0) {
+        cursor->x = 0;
     }
 
-    if (cursor-> y == 0) {
+    if (cursor-> y <= 0) {
         cursor->y = 1;
     }
 
-    if (cursor->x > cursor->x_limit) {
+    if (cursor->x >= cursor->x_limit) {
         cursor->x = cursor->x_limit - 1;
     }
 
-    if (cursor->y > cursor->y_limit) {
+    if (cursor->y >= cursor->y_limit) {
         cursor->y = cursor->y_limit - 1;
     }
 }
@@ -217,11 +217,9 @@ int main() {
     Field* field = get_field(win_rows, win_cols);
     init_field(field);
 
-    field->field[win_rows / 2][win_cols / 2]->type = WATER;
-    field->field[win_rows / 2][win_cols / 2]->symbol = color(WATER_SYMB, FORE_BLUE);
-
     update_loop(field, &cursor);
     destroy_field(field);
+    clear_screen();
 
     return 0;
 }
