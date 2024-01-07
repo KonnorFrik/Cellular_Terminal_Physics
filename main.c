@@ -1,19 +1,23 @@
+#define _DEFAULT_SOURCE // for legacy usleep func
 #include <sys/ioctl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "field/cell_types.h"
 #include "field/field.h"
 #include "field/rules.h"
+#include "common.h"
 
 #define TRM_DEBUG 0
-#define FPS 2//30
-
+#define FPS (30 * 1500)
 
 void print_field(Field* field) {
     for (size_t r = 0; r < field->rows; ++r) {
         for (size_t c = 0; c < field->columns; ++c) {
             printf(field->field[r][c]->symbol);
+            field->field[r][c]->status = NOT_UPDATED;
         }
 
         printf("\n");
@@ -28,7 +32,10 @@ void update_rule(Field* field) {
                     break;
 
                 case WATER:
-                    water_rule(field, r, c);
+                    if (field->field[r][c]->status == NOT_UPDATED) {
+                        field->field[r][c]->status = UPDATED;
+                        water_rule(field, r, c);
+                    }
                     break;
             }
         }
@@ -37,14 +44,34 @@ void update_rule(Field* field) {
     }
 }
 
+int process_pressed_key() {
+    char symb = getc(stdin);
+    int work_status = 1;
+
+    switch (symb) {
+        case 'q':
+        case 'Q':
+            work_status = 0;
+            break;
+    }
+
+    return work_status;
+}
+
 void update_loop(Field* field) {
     int work = 1;
 
     while (work) {
+        if (kbhit()) {
+            work = process_pressed_key();
+        }
+
         update_rule(field);
+
+        clear_screen();
         print_field(field);
-        printf("> ");
-        getc(stdin);
+
+        usleep(FPS);
         //sleep(FPS);
     }
 }

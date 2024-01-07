@@ -9,5 +9,6 @@
 
 int kbhit();
 void cell_swap(CELL** from_addr, CELL** to_addr);
+void clear_screen();
 
 #endif

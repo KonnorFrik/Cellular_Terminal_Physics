@@ -12,13 +12,13 @@ void water_rule(Field* field, size_t curr_row, size_t curr_col) {
         cell_swap(&(field->field[curr_row + 1][curr_col]),
                   &(field->field[curr_row][curr_col]));
 
-    } else if (curr_row > 0 && field->field[curr_row - 1][curr_col] == NONE ) { // not a next to border cell
+    } else if (curr_col > 0 && field->field[curr_row][curr_col - 1]->type == NONE ) { // not a next to border cell
         cell_swap(&(field->field[curr_row][curr_col]),
-                  &(field->field[curr_row - 1][curr_col]));
+                  &(field->field[curr_row][curr_col - 1]));
 
-    } else if (curr_row + 1 < field->rows && field->field[curr_row + 1][curr_col] == NONE) {
+    } else if (curr_col + 1 < field->rows && field->field[curr_row][curr_col + 1]->type == NONE) {
             cell_swap(&(field->field[curr_row][curr_col]),
-                      &(field->field[curr_row + 1][curr_col]));
+                      &(field->field[curr_row][curr_col + 1]));
     }
 }
 
