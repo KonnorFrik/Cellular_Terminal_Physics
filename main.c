@@ -6,6 +6,7 @@
 #include <time.h>
 
 #include "field/cell_types.h"
+#include "field/cell_types_table.h"
 #include "field/field.h"
 #include "field/rules.h"
 #include "paint/paint.h"
@@ -55,12 +56,20 @@ void update_rule(Field* field) {
 }
 
 void cursor_check_limit(Cursor* cursor) {
+    if (cursor-> x == 0) {
+        cursor->x = 1;
+    }
+
+    if (cursor-> y == 0) {
+        cursor->y = 1;
+    }
+
     if (cursor->x > cursor->x_limit) {
-        cursor->x = cursor->x_limit;
+        cursor->x = cursor->x_limit - 1;
     }
 
     if (cursor->y > cursor->y_limit) {
-        cursor->y = cursor->y_limit;
+        cursor->y = cursor->y_limit - 1;
     }
 }
 
@@ -97,7 +106,28 @@ int get_type_from_user() {
     return result;
 }
 
-int process_pressed_key(Cursor* cursor) {
+void spawn_elem(Field* field, Cursor* cursor) {
+    int new_type = cursor->hand;
+    char* new_symbol = NONE_SYMB;
+    char* new_color = RESET;
+
+    switch (new_type) {
+        case NONE:
+            new_symbol = NONE_SYMB;
+            new_color = RESET;
+            break;
+
+        case WATER:
+            new_symbol = WATER_SYMB;
+            new_color = FORE_BLUE;
+            break;
+    }
+
+    field->field[cursor->y][cursor->x]->type = new_type;
+    field->field[cursor->y][cursor->x]->symbol = color(new_symbol, new_color);
+}
+
+int process_pressed_key(Field* field, Cursor* cursor) {
     char symb = getc(stdin);
     int work_status = 1;
 
@@ -130,6 +160,10 @@ int process_pressed_key(Cursor* cursor) {
         case CURSOR_SET_TYPE:
             cursor->hand = get_type_from_user();
             break;
+
+        case CURSOR_SPAWN_ELEM:
+            spawn_elem(field, cursor);
+            break;
     }
 
     return work_status;
@@ -140,7 +174,7 @@ void update_loop(Field* field, Cursor* cursor) {
 
     while (work) {
         if (kbhit()) {
-            work = process_pressed_key(cursor);
+            work = process_pressed_key(field, cursor);
         }
 
         update_rule(field);

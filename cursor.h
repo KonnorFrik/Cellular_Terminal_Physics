@@ -8,6 +8,7 @@
 #define CURSOR_UP_KEY 'k'
 #define CURSOR_DOWN_KEY 'j'
 #define CURSOR_SET_TYPE 's'
+#define CURSOR_SPAWN_ELEM ' '
 
 typedef struct {
     size_t x;
