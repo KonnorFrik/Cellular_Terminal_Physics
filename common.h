@@ -3,6 +3,9 @@
 
 #include <termios.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include "field/field.h"
 
 int kbhit();
 void cell_swap(CELL** from_addr, CELL** to_addr);
