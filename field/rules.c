@@ -22,3 +22,6 @@ void water_rule(Field* field, size_t curr_row, size_t curr_col) {
     }
 }
 
+//void none_rule(Field* field, size_t curr_rows, size_t curr_col) {
+    //return;
+//}

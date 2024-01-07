@@ -4,9 +4,10 @@
 
 #include "field/cell_types.h"
 #include "field/field.h"
+#include "field/rules.h"
 
 #define TRM_DEBUG 0
-#define FPS 1/30
+#define FPS 2//30
 
 
 void print_field(Field* field) {
@@ -19,12 +20,32 @@ void print_field(Field* field) {
     }
 }
 
+void update_rule(Field* field) {
+    for (size_t r = 0; r < field->rows; ++r) {
+        for (size_t c = 0; c < field->columns; ++c) {
+            switch (field->field[r][c]->type) {
+                case NONE:
+                    break;
+
+                case WATER:
+                    water_rule(field, r, c);
+                    break;
+            }
+        }
+
+        printf("\n");
+    }
+}
+
 void update_loop(Field* field) {
     int work = 1;
 
     while (work) {
+        update_rule(field);
         print_field(field);
-        sleep(FPS);
+        printf("> ");
+        getc(stdin);
+        //sleep(FPS);
     }
 }
 
@@ -45,8 +66,10 @@ int main() {
     Field* field = get_field(win_rows, win_cols);
     init_field(field);
 
-    update_loop(field);
+    field->field[win_rows / 2][win_cols / 2]->type = WATER;
+    field->field[win_rows / 2][win_cols / 2]->symbol = WATER_SYMB;
 
+    update_loop(field);
     destroy_field(field);
 
     return 0;

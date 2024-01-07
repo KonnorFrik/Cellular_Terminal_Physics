@@ -2,7 +2,7 @@
 
 cmp = gcc
 wflags = -Wall -Werror -Wextra
-flags = -std=c11 -c #-g
+flags = -std=c11 -c -g
 
 src_dirs = . paint field
 SRC = $(foreach dir, $(src_dirs), $(wildcard $(dir)/*.c))

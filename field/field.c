@@ -1,5 +1,6 @@
 #include "field.h"
 #include "cell_types.h"
+#include "rules.h"
 
 static void destroy_cell_matrix(CELL*** obj, size_t rows, size_t columns);
 static void destroy_cell_array(CELL** obj, size_t size);
@@ -13,6 +14,7 @@ void init_field(Field* obj) {
         for (size_t c = 0; c < obj->columns; ++c) {
             obj->field[r][c]->type = NONE;
             obj->field[r][c]->symbol = NONE_SYMB;
+            //obj->field[r][c]->rule_func = none_rule;
         }
     }
 }
