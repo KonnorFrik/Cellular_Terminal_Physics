@@ -1,4 +1,5 @@
 #include "field.h"
+#include "cell_types.h"
 #include "../common.h"
 
 #define FLD_DEBUG 0

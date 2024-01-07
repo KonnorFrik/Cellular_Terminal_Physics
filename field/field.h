@@ -18,5 +18,6 @@ typedef struct {
 Field* get_field(size_t rows, size_t columns);
 void init_field(Field* obj);
 void destroy_field(Field* obj);
+void init_field(Field* obj);
 
 #endif

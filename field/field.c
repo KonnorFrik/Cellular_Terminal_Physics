@@ -1,4 +1,5 @@
 #include "field.h"
+#include "cell_types.h"
 
 static void destroy_cell_matrix(CELL*** obj, size_t rows, size_t columns);
 static void destroy_cell_array(CELL** obj, size_t size);
@@ -6,17 +7,16 @@ static CELL*** get_cell_matrix(size_t rows, size_t columns);
 static CELL** get_cell_arr(size_t size);
 
 //static void print_field(Field* obj);
-//static void init_field(Field* obj);
-//
-//static void init_field(Field* obj) {
-    //for (size_t r = 0; r < obj->rows; ++r) {
-        //for (size_t c = 0; c < obj->columns; ++c) {
-            //obj->field[r][c]->x = r;
-            //obj->field[r][c]->y = c;
-        //}
-    //}
-//}
-//
+
+void init_field(Field* obj) {
+    for (size_t r = 0; r < obj->rows; ++r) {
+        for (size_t c = 0; c < obj->columns; ++c) {
+            obj->field[r][c]->type = NONE;
+            obj->field[r][c]->symbol = NONE_SYMB;
+        }
+    }
+}
+
 //static void print_field(Field* obj) {
     //for (size_t r = 0; r < obj->rows; ++r) {
         //for (size_t c = 0; c < obj->columns; ++c) {

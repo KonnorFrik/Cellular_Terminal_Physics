@@ -6,8 +6,7 @@ flags = -std=c11 -c #-g
 
 src_dirs = . paint field
 SRC = $(foreach dir, $(src_dirs), $(wildcard $(dir)/*.c))
-#OBJ = $(SRC:.c=.o)
-OBJ = $(foreach dir, $(src_dirs), $(wildcard $(dir)/*.o))
+OBJ = $(SRC:.c=.o)
 
 targets = physics
 
