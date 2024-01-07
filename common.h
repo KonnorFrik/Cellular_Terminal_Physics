@@ -4,4 +4,7 @@
 #include <termios.h>
 #include <fcntl.h>
 
+int kbhit();
+void cell_swap(CELL** from_addr, CELL** to_addr);
+
 #endif

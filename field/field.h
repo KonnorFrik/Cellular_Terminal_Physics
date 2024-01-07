@@ -1,11 +1,6 @@
 #ifndef __FIELD_H__
 #define __FIELD_H__
 
-#define FLD_DEBUG 0
-#if FLD_DEBUG == 1
-#include <stdio.h>
-#endif
-
 #include <stdlib.h>
 
 typedef struct {
