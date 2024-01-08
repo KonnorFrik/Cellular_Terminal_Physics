@@ -1,5 +1,15 @@
 #include "common.h"
 
+void clear_screen() {
+    printf("\033[2J");
+}
+
+void cell_swap(CELL** from_addr, CELL** to_addr) {
+    CELL* tmp = *from_addr;
+    *from_addr = *to_addr;
+    *to_addr = tmp;
+}
+
 int kbhit() {
     struct termios oldt = {0}, newt = {0};
     int ch = 0;
