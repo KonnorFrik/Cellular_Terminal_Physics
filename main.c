@@ -20,6 +20,7 @@
 #define QUIT_KEY 'q'
 #define FAST_COMMAND_KEY 'e'
 
+void print_status(Cursor* cursor);
 void print_field(Field* field, Cursor* cursor);
 void update_rule(Field* field);
 int get_type_from_user();
@@ -161,6 +162,10 @@ int process_pressed_key(Field* field, Cursor* cursor) {
     return work_status;
 }
 
+void print_status(Cursor* cursor) {
+    printf("X: %d | Y: %d | Xlim: %d | Ylim: %d | hand: %s\n", cursor->x, cursor->y, cursor->x_limit, cursor->y_limit, TABLE[cursor->hand].name);
+}
+
 void update_loop(Field* field, Cursor* cursor) {
     int work = 1;
 
@@ -172,6 +177,8 @@ void update_loop(Field* field, Cursor* cursor) {
         update_rule(field);
 
         clear_screen();
+        //print_status(cursor);
+        //usleep(FPS);
         print_field(field, cursor);
 
         usleep(FPS);

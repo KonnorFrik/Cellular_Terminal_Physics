@@ -3,7 +3,7 @@
 
 #define NONE_SYMB " "
 #define WATER_SYMB "~"
-#define SAND_SYMB "\u25A1"
+#define SAND_SYMB "\u25A0"
 
 enum { // types
     NONE = 0,
