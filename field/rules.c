@@ -53,11 +53,11 @@ void water_rule(Field* field, size_t curr_row, size_t curr_col) {
                         &(field->field[curr_row][curr_col + 1]));
         }
 
-    } else if ((field->columns - curr_col) == 1) { // right border
+    } else if ((field->columns - curr_col) == 1 && field->field[curr_row][curr_col - 1]->type == NONE) { // right border
         cell_swap(&(field->field[curr_row][curr_col]),
                   &(field->field[curr_row][curr_col - 1]));
 
-    } else if (curr_col == 0) { // left border
+    } else if (curr_col == 0 && field->field[curr_row][curr_col + 1]->type == NONE) { // left border
             cell_swap(&(field->field[curr_row][curr_col]),
                       &(field->field[curr_row][curr_col + 1]));
     }
