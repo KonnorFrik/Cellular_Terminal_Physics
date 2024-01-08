@@ -12,6 +12,7 @@
 #include "paint/paint.h"
 #include "common/common.h"
 #include "cursor/cursor.h"
+#include "fast_commands/f_commands.h"
 
 #define TRM_DEBUG 0
 #define FPS (30 * 1000)
@@ -150,6 +151,10 @@ int process_pressed_key(Field* field, Cursor* cursor) {
 
         case CURSOR_SPAWN_ELEM:
             spawn_elem(field, cursor);
+            break;
+
+        case FAST_COMMAND_KEY:
+            process_fast_command(field, get_fast_command_input());
             break;
     }
 
