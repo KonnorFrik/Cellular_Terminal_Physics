@@ -1,6 +1,6 @@
 #include "field.h"
 #include "cell_types.h"
-#include "../common.h"
+#include "../common/common.h"
 
 #define FLD_DEBUG 0
 #if FLD_DEBUG == 1

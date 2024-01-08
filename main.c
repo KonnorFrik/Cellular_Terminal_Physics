@@ -10,14 +10,23 @@
 #include "field/field.h"
 #include "field/rules.h"
 #include "paint/paint.h"
-#include "common.h"
-#include "cursor.h"
+#include "common/common.h"
+#include "cursor/cursor.h"
 
 #define TRM_DEBUG 0
 #define FPS (30 * 1000)
 
-#define QUIT_KEY_LOWER 'q'
-#define QUIT_KEY_UPPER 'Q'
+#define QUIT_KEY 'q'
+#define FAST_COMMAND_KEY 'e'
+
+void print_field(Field* field, Cursor* cursor);
+void update_rule(Field* field);
+int get_type_from_user();
+void spawn_elem(Field* field, const Cursor* cursor);
+int process_pressed_key(Field* field, Cursor* cursor);
+void update_loop(Field* field, Cursor* cursor);
+void init_cursor(Cursor* obj, size_t win_rows, size_t win_cols);
+
 
 void print_field(Field* field, Cursor* cursor) {
     for (size_t r = 0; r < field->rows; ++r) {
@@ -61,24 +70,6 @@ void update_rule(Field* field) {
         }
 
         printf("\n");
-    }
-}
-
-void cursor_check_limit(Cursor* cursor) {
-    if (cursor-> x < 0) {
-        cursor->x = 0;
-    }
-
-    if (cursor-> y <= 0) {
-        cursor->y = 1;
-    }
-
-    if (cursor->x >= cursor->x_limit) {
-        cursor->x = cursor->x_limit - 1;
-    }
-
-    if (cursor->y >= cursor->y_limit) {
-        cursor->y = cursor->y_limit - 1;
     }
 }
 
@@ -129,8 +120,7 @@ int process_pressed_key(Field* field, Cursor* cursor) {
     int work_status = 1;
 
     switch (symb) {
-        case QUIT_KEY_UPPER:
-        case QUIT_KEY_LOWER:
+        case QUIT_KEY:
             work_status = 0;
             break;
 

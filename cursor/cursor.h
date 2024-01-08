@@ -19,4 +19,6 @@ typedef struct {
     char* symbol;
 } Cursor;
 
+void cursor_check_limit(Cursor* cursor);
+
 #endif

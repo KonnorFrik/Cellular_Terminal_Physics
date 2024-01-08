@@ -1,5 +1,4 @@
 #include "common.h"
-#include "field/field.h"
 
 void clear_screen() {
     printf("\033[2J");
