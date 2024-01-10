@@ -6,20 +6,25 @@
 +-------------------------+
 
 +-------------------------+
-| Language: C             |
+| Language: C     *      *|
+| For build:  "make"   *  |
+|    *          or   *    |
+|       * "make physics"  |
+|  *            *       * |
+| For fun: "./physics"    |
 +-------------------------+
 
 +-------------------------+
-|          Keys:          |
+|    *     Keys: *    *   |
 |- - - - - Move - - - - - |
-|    h    - Move left     |
-|    j    - Move down     |
-|    k    - Move up       |
-|    l    - Move right    |
+|   *h    - Move left *   |
+|    j  * - Move down   * |
+| *  k    - Move up       |
+|    l *  - Move right *  |
 |- - - - Control- - - - - |
-|    s    - Switch element|
+|*   s    - Switch element|
 | 'space' - Spawn element |
-|    e    - Fast command  |
+|  * e   *- Fast command  |
 |    i    - Help message  |
-|    q    - Quit          |
+| *  q *  - Quit  *    *  |
 +-------------------------+
