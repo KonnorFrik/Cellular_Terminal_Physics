@@ -26,13 +26,14 @@ static int get_fast_command_input() {
         int ind = 1;
         int last_max_elem = ind;
         printf("Choose action:\n");
-        printf("\t-1 - Exit\n");
 
         while (f_cmd_table[ind].name != 0) {
             printf("\t%2d - %s\n", f_cmd_table[ind].cmd_type, f_cmd_table[ind].name);
             last_max_elem = ind;
             ind++;
         }
+
+        printf("\t-1 - Exit\n");
 
         int input = 0;
         scanf("%d", &input);
