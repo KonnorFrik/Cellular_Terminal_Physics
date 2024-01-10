@@ -1,5 +1,7 @@
 #include "f_commands.h"
 
+static int get_fast_command_input();
+
 void f_cmd_clear(Field* field);
 
 typedef struct {
@@ -14,7 +16,7 @@ const F_CMD_TABLE f_cmd_table[] = {
     {0, 0, 0}
 };
 
-int get_fast_command_input() {
+static int get_fast_command_input() {
     int result = 0;
     int loop = 1;
 
@@ -24,9 +26,10 @@ int get_fast_command_input() {
         int ind = 1;
         int last_max_elem = ind;
         printf("Choose action:\n");
+        printf("\t-1 - Exit\n");
 
         while (f_cmd_table[ind].name != 0) {
-            printf("\t%d - %s\n", f_cmd_table[ind].cmd_type, f_cmd_table[ind].name);
+            printf("\t%2d - %s\n", f_cmd_table[ind].cmd_type, f_cmd_table[ind].name);
             last_max_elem = ind;
             ind++;
         }
@@ -34,8 +37,9 @@ int get_fast_command_input() {
         int input = 0;
         scanf("%d", &input);
 
-        if (input > last_max_elem) {
+        if (input > last_max_elem || input == 0) {
             printf("\n\t\tInvalid Input\n");
+            getc(stdin);
 
         } else {
             result = input;
@@ -46,8 +50,12 @@ int get_fast_command_input() {
     return result;
 }
 
-void process_fast_command(Field* field, int command) {
-    f_cmd_table[command].func(field);
+void process_fast_command(Field* field) {
+    int command_input = get_fast_command_input();;
+
+    if (command_input != -1) {
+        f_cmd_table[command_input].func(field);
+    }
 }
 
 void f_cmd_clear(Field* field) {

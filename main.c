@@ -77,7 +77,6 @@ void update_rule(Field* field) {
 
 int get_type_from_user() {
     int result = 0;
-    size_t ind = 0;
     int last_max_elem = 0;
     int loop = 1;
 
@@ -85,18 +84,21 @@ int get_type_from_user() {
 
     while (loop) {
         printf("Select new item:\n");
+        printf("\t-1 - Exit\n");
+        size_t ind = 0;
 
         while (TABLE[ind].name != 0) {
-            printf("\t%d - %s\n", TABLE[ind].type, TABLE[ind].name);
-            last_max_elem = TABLE[ind].type;
+            printf("\t%2d - %s\n", TABLE[ind].type, TABLE[ind].name);
+            last_max_elem = ind;
             ind++;
         }
 
         int input = 0;
         scanf("%d", &input);
 
-        if (input > last_max_elem) {
+        if (input > last_max_elem || input == 0) {
             printf("\nYou choose invalid element\n\n");
+            getc(stdin);
             continue;
 
         } else {
@@ -153,7 +155,13 @@ int process_pressed_key(Field* field, Cursor* cursor) {
             break;
 
         case CURSOR_SET_TYPE:
-            cursor->hand = get_type_from_user();
+            int user_input = get_type_from_user();
+
+            if (user_input == -1) {
+                user_input = cursor->hand;
+            }
+
+            cursor->hand = user_input;
             break;
 
         case CURSOR_SPAWN_ELEM:
@@ -161,7 +169,7 @@ int process_pressed_key(Field* field, Cursor* cursor) {
             break;
 
         case FAST_COMMAND_KEY:
-            process_fast_command(field, get_fast_command_input());
+            process_fast_command(field);
             break;
     }
 
