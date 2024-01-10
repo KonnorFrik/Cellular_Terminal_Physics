@@ -16,4 +16,9 @@ enum { // statuses
     UPDATED,
 };
 
+enum {
+    NOT_COLORED = 0,
+    COLORED,
+};
+
 #endif

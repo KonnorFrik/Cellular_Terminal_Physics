@@ -19,8 +19,12 @@
 
 #define QUIT_KEY 'q'
 #define FAST_COMMAND_KEY 'e'
+#define INFO_KEY 'i'
 
+#if TRM_DEBUG == 1
 void print_status(Cursor* cursor);
+#endif
+
 void print_field(Field* field, Cursor* cursor);
 void update_rule(Field* field);
 int get_type_from_user();
@@ -28,6 +32,10 @@ void spawn_elem(Field* field, const Cursor* cursor);
 int process_pressed_key(Field* field, Cursor* cursor);
 void update_loop(Field* field, Cursor* cursor);
 void init_cursor(Cursor* obj, size_t win_rows, size_t win_cols);
+
+static void print_help_message(size_t offset);
+static void print_hello_msg(size_t offset);
+static void print_tab(size_t count);
 
 
 void print_field(Field* field, Cursor* cursor) {
@@ -77,7 +85,6 @@ void update_rule(Field* field) {
 
 int get_type_from_user() {
     int result = 0;
-    size_t ind = 0;
     int last_max_elem = 0;
     int loop = 1;
 
@@ -85,18 +92,22 @@ int get_type_from_user() {
 
     while (loop) {
         printf("Select new item:\n");
+        size_t ind = 0;
 
         while (TABLE[ind].name != 0) {
-            printf("\t%d - %s\n", TABLE[ind].type, TABLE[ind].name);
-            last_max_elem = TABLE[ind].type;
+            printf("\t%2d - %s\n", TABLE[ind].type, TABLE[ind].name);
+            last_max_elem = ind;
             ind++;
         }
+
+        printf("\t-1 - Exit\n");
 
         int input = 0;
         scanf("%d", &input);
 
-        if (input > last_max_elem) {
+        if (input > last_max_elem || input == 0) {
             printf("\nYou choose invalid element\n\n");
+            getc(stdin);
             continue;
 
         } else {
@@ -113,8 +124,14 @@ void spawn_elem(Field* field, const Cursor* cursor) {
     char* new_symbol = TABLE[new_type].symbol;
     char* new_color = TABLE[new_type].color;
 
+    if (field->field[cursor->y][cursor->x]->color_status) {
+        free(field->field[cursor->y][cursor->x]->symbol);
+        field->field[cursor->y][cursor->x]->color_status = NOT_COLORED;
+    }
+
     field->field[cursor->y][cursor->x]->type = new_type;
     field->field[cursor->y][cursor->x]->symbol = color(new_symbol, new_color);
+    field->field[cursor->y][cursor->x]->color_status = COLORED;
 }
 
 int process_pressed_key(Field* field, Cursor* cursor) {
@@ -147,7 +164,13 @@ int process_pressed_key(Field* field, Cursor* cursor) {
             break;
 
         case CURSOR_SET_TYPE:
-            cursor->hand = get_type_from_user();
+            int user_input = get_type_from_user();
+
+            if (user_input == -1) {
+                user_input = cursor->hand;
+            }
+
+            cursor->hand = user_input;
             break;
 
         case CURSOR_SPAWN_ELEM:
@@ -155,16 +178,25 @@ int process_pressed_key(Field* field, Cursor* cursor) {
             break;
 
         case FAST_COMMAND_KEY:
-            process_fast_command(field, get_fast_command_input());
+            process_fast_command(field);
+            break;
+
+        case INFO_KEY:
+            size_t offset = (cursor->x_limit / 2) - 13;
+            clear_screen();
+            print_help_message(offset);
+            getc(stdin);
             break;
     }
 
     return work_status;
 }
 
+#if TRM_DEBUG == 1
 void print_status(Cursor* cursor) {
     printf("X: %d | Y: %d | Xlim: %d | Ylim: %d | hand: %s\n", cursor->x, cursor->y, cursor->x_limit, cursor->y_limit, TABLE[cursor->hand].name);
 }
+#endif
 
 void update_loop(Field* field, Cursor* cursor) {
     int work = 1;
@@ -177,12 +209,9 @@ void update_loop(Field* field, Cursor* cursor) {
         update_rule(field);
 
         clear_screen();
-        //print_status(cursor);
-        //usleep(FPS);
         print_field(field, cursor);
 
         usleep(FPS);
-        //sleep(FPS);
     }
 }
 
@@ -195,6 +224,55 @@ void init_cursor(Cursor* obj, size_t win_rows, size_t win_cols) {
     obj->symbol = CURSOR_SYMBOL;
 }
 
+static void print_tab(size_t count) {
+    for (size_t i = 0; i < count; ++i) {
+        printf(" ");
+    }
+}
+
+static void print_hello_msg(size_t offset) {
+    print_tab(offset);
+    printf("+-------------------------+\n");
+    print_tab(offset);
+    printf("|    Welcome to Termycs   |\n");
+    print_tab(offset);
+    printf("|    (Terminal Physics)   |\n");
+    print_tab(offset);
+    printf("+-------------------------+\n");
+}
+
+static void print_help_message(size_t offset) {
+    printf("\n");
+    print_tab(offset);
+    printf("+-------------------------+\n");
+    print_tab(offset);
+    printf("|          Keys:          |\n");
+    print_tab(offset);
+    printf("|- - - - - Move - - - - - |\n");
+    print_tab(offset);
+    printf("|    h    - Move left     |\n");
+    print_tab(offset);
+    printf("|    j    - Move down     |\n");
+    print_tab(offset);
+    printf("|    k    - Move up       |\n");
+    print_tab(offset);
+    printf("|    l    - Move right    |\n");
+    print_tab(offset);
+    printf("|- - - - Control- - - - - |\n");
+    print_tab(offset);
+    printf("|    s    - Switch element|\n");
+    print_tab(offset);
+    printf("| 'space' - Spawn element |\n");
+    print_tab(offset);
+    printf("|    e    - Fast command  |\n");
+    print_tab(offset);
+    printf("|    i    - Help message  |\n");
+    print_tab(offset);
+    printf("|    q    - Quit          |\n");
+    print_tab(offset);
+    printf("+-------------------------+\n");
+}
+
 int main() {
     srand(time(0));
     struct winsize w_size = {0};
@@ -202,6 +280,14 @@ int main() {
 
     size_t win_rows = w_size.ws_row;
     size_t win_cols = w_size.ws_col;
+    size_t msg_offset = (win_cols / 2) - 13;
+
+    clear_screen();
+    print_hello_msg(msg_offset);
+    print_help_message(msg_offset);
+    print_tab(msg_offset);
+    printf("*Press enter for start\n");
+    getc(stdin);
 
     #if TRM_DEBUG == 1
     fprintf(stderr, "rows: %u\n", w_size.ws_row);

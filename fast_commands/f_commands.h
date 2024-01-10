@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum {
+enum { // Commands codes
     CLEAR = 1,
 };
 
-int get_fast_command_input();
-void process_fast_command(Field* field, int command);
+//int get_fast_command_input();
+void process_fast_command(Field* field);
 
 #endif
