@@ -53,6 +53,11 @@ void process_fast_command(Field* field, int command) {
 void f_cmd_clear(Field* field) {
     for (size_t r = 0; r < field->rows; ++r) {
         for (size_t c = 0; c < field->columns; ++c) {
+            if (field->field[r][c]->color_status) {
+                free(field->field[r][c]->symbol);
+                field->field[r][c]->color_status = NOT_COLORED;
+            }
+
             field->field[r][c]->type = NONE;
             field->field[r][c]->symbol = NONE_SYMB;
             field->field[r][c]->status = NOT_UPDATED;

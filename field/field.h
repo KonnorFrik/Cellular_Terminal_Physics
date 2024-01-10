@@ -7,7 +7,7 @@ typedef struct {
     char* symbol;
     int type;
     int status;
-    //void (*rule_func)(Field*, size_t, size_t);
+    int color_status;
 } CELL;
 
 typedef struct {

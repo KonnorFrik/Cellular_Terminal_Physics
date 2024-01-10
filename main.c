@@ -113,8 +113,14 @@ void spawn_elem(Field* field, const Cursor* cursor) {
     char* new_symbol = TABLE[new_type].symbol;
     char* new_color = TABLE[new_type].color;
 
+    if (field->field[cursor->y][cursor->x]->color_status) {
+        free(field->field[cursor->y][cursor->x]->symbol);
+        field->field[cursor->y][cursor->x]->color_status = NOT_COLORED;
+    }
+
     field->field[cursor->y][cursor->x]->type = new_type;
     field->field[cursor->y][cursor->x]->symbol = color(new_symbol, new_color);
+    field->field[cursor->y][cursor->x]->color_status = COLORED;
 }
 
 int process_pressed_key(Field* field, Cursor* cursor) {
@@ -177,12 +183,9 @@ void update_loop(Field* field, Cursor* cursor) {
         update_rule(field);
 
         clear_screen();
-        //print_status(cursor);
-        //usleep(FPS);
         print_field(field, cursor);
 
         usleep(FPS);
-        //sleep(FPS);
     }
 }
 

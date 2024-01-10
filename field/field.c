@@ -14,7 +14,7 @@ void init_field(Field* obj) {
         for (size_t c = 0; c < obj->columns; ++c) {
             obj->field[r][c]->type = NONE;
             obj->field[r][c]->symbol = NONE_SYMB;
-            //obj->field[r][c]->rule_func = none_rule;
+            obj->field[r][c]->color_status = NOT_COLORED;
         }
     }
 }
@@ -51,6 +51,11 @@ static CELL*** get_cell_matrix(size_t rows, size_t columns) {
 static void destroy_cell_array(CELL** obj, size_t size) {
     if (obj) {
         for (size_t i = 0; i < size; ++i) {
+            if (obj[i]->color_status) {
+                free(obj[i]->symbol);
+                obj[i]->color_status = NOT_COLORED;
+            }
+
             if (obj[i]) {
                 free(obj[i]);
             }
