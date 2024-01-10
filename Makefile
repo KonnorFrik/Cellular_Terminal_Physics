@@ -1,6 +1,5 @@
 .RECIPEPREFIX = >
-targets = physics
-.PHONY := $(targets)
+.PHONY := all
 
 cmp = gcc
 wflags = -Wall -Werror -Wextra
@@ -9,6 +8,9 @@ flags = -std=c11 -c -g
 src_dirs = . paint field cursor common fast_commands
 SRC = $(foreach dir, $(src_dirs), $(wildcard $(dir)/*.c))
 OBJ = $(SRC:.c=.o)
+
+targets = physics
+all: $(targets) clean
 
 physics: $(OBJ)
 > $(cmp) $(OBJ) -o $@
